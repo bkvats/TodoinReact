@@ -1,15 +1,33 @@
 import React, { useRef, useState } from "react";
-
+import decrypt from "../security/decrypt"
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordIcon, setPasswordIcon] = useState("🔓");
+    const [error, setError] = useState(false);
     const inputRef = useRef(null);
     const passwordRef = useRef(null);
+    function verify(event) {
+        event.preventDefault();
+        let completeData = JSON.parse(localStorage.getItem("usersData"));
+        if (!completeData[email]) {
+            setError(true);
+        }
+        else {
+            if (decrypt(completeData[email]["password"]) === password) {
+                window.location.href = "/todos"
+                setError(false);
+            }
+            else {
+                setError(true);
+            }
+        }
+    }
     return (
         <div className="flex flex-col gap-12 items-center justify-center">
             <h1 className="text-7xl text-center">💻</h1>
-            <form className="flex flex-col gap-6">
+            {error ? <p className="text-xl font-semibold text-red-700 border-2 border-red-700 rounded-md p-2">Incorrect login credentials i.e. user email or password! </p>: ""}
+            <form className="flex flex-col gap-6" onSubmit={verify}>
                 <input type="text"
                 ref={inputRef}
                 className="text-2xl bg-gray-300 bg-opacity-15 p-2 outline-none rounded-md"

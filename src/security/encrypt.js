@@ -6,9 +6,13 @@ function getSum(n) {
 export default function encrypt(s) {
     let password = "";
     let sum;
-    for (const i of s) {
-        sum = getSum(i.charCodeAt(0));
-        password += String.fromCharCode(i.charCodeAt(0) + sum) + sum;
+    let i = 0;
+    let temp;
+    while (i < s.length) {
+        temp = s[i];
+        sum = getSum(temp.charCodeAt(0)) % 10;
+        password += String.fromCharCode(temp.charCodeAt(0) + sum) + sum;
+        i++;
     }
     return password;
 }
