@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import decrypt from "../security/decrypt"
+import decrypt from "../security/decrypt";
+import {Link} from "react-router-dom"
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,6 +16,12 @@ export default function Login() {
         }
         else {
             if (decrypt(completeData[email]["password"]) === password) {
+                completeData[email]["todos"].push({
+                    id: 1,
+                    title: "Complete this app",
+                    description: "resolve all the errors in this app and complete it as soon as possible"
+                  });
+                localStorage.setItem("currentUserData", JSON.stringify(completeData[email]));
                 window.location.href = "/todos"
                 setError(false);
             }
@@ -62,6 +69,7 @@ export default function Login() {
                 </div>
                 <button type="submit" className="bg-orange-700 p-2 text-lg rounded-md font-semibold hover:opacity-70">Verify & Log in</button>
             </form>
+            <p className="text-xl font-semibold my-3">don't have a account? <Link to="/signup" className="underline">Sign up</Link> now</p>
         </div>
     );
 }

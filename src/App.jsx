@@ -1,10 +1,14 @@
 import { Outlet } from "react-router-dom"
-
+import { useState } from "react"
+import { UserDataContext } from "./context/UserDataContext"
 function App() {
+  const [userData, setUserData] = useState({});
   return (
-    <div className="h-screen w-screen bg-gray-900 text-white grid place-content-center">
-      <Outlet />
-    </div>
+    <UserDataContext.Provider value={{userData, setUserData}}>
+      <div className="h-screen w-screen bg-gray-900 text-white flex justify-center items-center">
+        <Outlet />
+      </div>
+    </UserDataContext.Provider>
   )
 }
 
