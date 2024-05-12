@@ -19,7 +19,14 @@ export default function Login() {
                 completeData[email]["todos"].push({
                     id: 1,
                     title: "Complete this app",
-                    description: "resolve all the errors in this app and complete it as soon as possible"
+                    description: "resolve all the errors in this app and complete it as soon as possible",
+                    completed: true
+                  });
+                completeData[email]["todos"].push({
+                    id: 2,
+                    title: "This is second todo",
+                    description: "resolve all the errors in this app and complete it as soon as possible",
+                    completed: true
                   });
                 localStorage.setItem("currentUserData", JSON.stringify(completeData[email]));
                 window.location.href = "/todos"

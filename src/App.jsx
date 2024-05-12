@@ -5,7 +5,7 @@ function App() {
   const [userData, setUserData] = useState({});
   return (
     <UserDataContext.Provider value={{userData, setUserData}}>
-      <div className="h-screen w-screen bg-gray-900 text-white flex justify-center items-center">
+      <div className="min-h-screen bg-gray-900 text-white flex justify-center items-center">
         <Outlet />
       </div>
     </UserDataContext.Provider>
