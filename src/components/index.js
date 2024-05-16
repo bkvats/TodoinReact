@@ -3,4 +3,5 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Todos from "./Todos";
 import ViewAndEditTodo from "./ViewAndEditTodo"
-export {Home, Login, Signup, Todos, ViewAndEditTodo};
+import Recents from "./Recents";
+export {Home, Login, Signup, Todos, ViewAndEditTodo, Recents};

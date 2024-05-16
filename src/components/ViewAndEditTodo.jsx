@@ -1,16 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useUserDataContext } from "../context/UserDataContext";
+import encrypt from "../security/encrypt";
+import decrypt from "../security/decrypt";
 export default function ViewAndEditTodo() {
     const [title, setTitle] = useState("");
     const [description, setDiscription] = useState("");
-    const [isRequireToFill, setIsRequireToFill] = useState(true);
     const titleRef = useRef();
     const { id } = useParams();
     let { edit } = useParams();
     edit = edit === "true";
     let {divOneHeight} = useParams();
     divOneHeight = Number(divOneHeight);
+    const bgStyle = {
+        height: `${divOneHeight}px`
+    }
     const { userData } = useUserDataContext();
     function handleClick(event) {
         event.preventDefault();
@@ -18,23 +22,24 @@ export default function ViewAndEditTodo() {
             if (id == "0") {
                 userData["todos"].push({
                     id: Date.now(),
-                    title: title,
-                    description: description,
+                    title: encrypt(title),
+                    description: encrypt(description),
                     completed: false
                 })
             }
             else {
                 for (const i of userData["todos"]) {
                     if (i["id"] == id) {
-                        i["title"] = title;
-                        console.log(i["description"])
-                        i["description"] = description;
-                        console.log(i["description"])
+                        i["title"] = encrypt(title);
+                        i["description"] = encrypt(description);
                         break;
                     }
                 }
             }
             localStorage.setItem("currentUserData", JSON.stringify(userData));
+            let completeData = JSON.parse(localStorage.getItem("usersData"));
+            completeData[userData["email"]]["todos"] = userData["todos"]
+            localStorage.setItem("usersData", JSON.stringify(completeData));
         }
         window.location.href = "/todos";
     }
@@ -42,8 +47,8 @@ export default function ViewAndEditTodo() {
         if (userData["todos"]) {
             for (const i of userData["todos"]) {
                 if (i["id"] == id) {
-                    setTitle(i["title"])
-                    setDiscription(i["description"])
+                    setTitle(decrypt(i["title"]));
+                    setDiscription(decrypt(i["description"]));
                     break;
                 }
             }
@@ -53,7 +58,7 @@ export default function ViewAndEditTodo() {
         titleRef.current.focus();
     }, []);
     return (
-        <div className={`h-[${divOneHeight}px] w-[100%] absolute bg-black bg-opacity-80 grid place-content-center text-black`}>
+        <div className={`w-[100%] absolute bg-black bg-opacity-80 grid place-content-center text-black`} style={bgStyle}>
             <div className="w-[70vw] bg-black flex flex-col py-10 px-4 border-2 border-violet-900 gap-10 rounded-lg shadow-violet-500 shadow-md">
                 <form className="flex flex-col gap-10" onSubmit={handleClick}>
                     <input
@@ -63,7 +68,7 @@ export default function ViewAndEditTodo() {
                         onChange={(event) => setTitle(event.target.value)}
                         placeholder="Title"
                         readOnly={edit}
-                        required={isRequireToFill}
+                        required
                         type="text" />
                     <textarea
                         value={description}

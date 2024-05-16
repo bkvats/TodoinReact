@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import decrypt from "../security/decrypt";
 import {Link} from "react-router-dom"
+import { parse } from "postcss";
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -16,20 +17,10 @@ export default function Login() {
         }
         else {
             if (decrypt(completeData[email]["password"]) === password) {
-                completeData[email]["todos"].push({
-                    id: 1,
-                    title: "Complete this app",
-                    description: "resolve all the errors in this app and complete it as soon as possible",
-                    completed: true
-                  });
-                completeData[email]["todos"].push({
-                    id: 2,
-                    title: "This is second todo",
-                    description: "resolve all the errors in this app and complete it as soon as possible",
-                    completed: true
-                  });
+                completeData[email]["email"] = email;
                 localStorage.setItem("currentUserData", JSON.stringify(completeData[email]));
-                window.location.href = "/todos"
+                window.location.href = "/todos";
+                localStorage.setItem("lastUser", email);
                 setError(false);
             }
             else {
@@ -37,6 +28,15 @@ export default function Login() {
             }
         }
     }
+    useEffect(() => {
+        if (localStorage.getItem("lastUser")) {
+            setEmail(localStorage.getItem("lastUser"));
+            passwordRef.current.focus();
+        }
+        else {
+            inputRef.current.focus();
+        }
+    }, []);
     return (
         <div className="flex flex-col gap-12 items-center justify-center">
             <h1 className="text-7xl text-center">💻</h1>

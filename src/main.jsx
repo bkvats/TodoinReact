@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
-import {Home, Login, Signup, Todos, ViewAndEditTodo} from "./components"
+import {Home, Login, Recents, Signup, Todos, ViewAndEditTodo} from "./components"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -14,6 +14,7 @@ const router = createBrowserRouter(
       <Route path="todos" element = {<Todos />}>
         <Route path="view/:id/:edit/:divOneHeight" element = {<ViewAndEditTodo />} />
       </Route>
+      <Route path="recents" element={<Recents />} />
     </Route>
   )
 )
